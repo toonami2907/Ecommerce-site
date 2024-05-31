@@ -1,15 +1,23 @@
 import React from 'react'
+import Video from '../assets/BackcartVideo.mp4'; 
+import './banner.css';
 import '../App.css'
 export default function Banner() {
   return (
-    <div>
-    <style>
-
-    </style>
-        <section className='h-[400px] bg-green-400'>
-            
-        </section>
+    <div className='banner'>
+    <video id='video' src={Video} type="video/mp4" loop muted autoPlay>
+      Your browser does not support the video tag.
+    </video>
+    <div className='overlay'></div>
+    <div className='content'>
+      <h1>
+        SHOPPING TODAY
+      </h1>
+      <h2>
+        We Have Everything YOU Need
+      </h2>
     </div>
+  </div>
   )
 }
 

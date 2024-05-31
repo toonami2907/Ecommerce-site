@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Heart, Menu, Search, ShoppingBagIcon, User, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Heart, Menu, Search, ShoppingBagIcon, X } from 'lucide-react';
 import Cart from '../Pages/ProductPage/Cart';
 
 const Navigation = [
   { name: 'Trending', to: '#' },
-  { name: 'Men ', to: '#' },
+  { name: 'Men', to: '#' },
   { name: 'Female', to: '#' },
   { name: 'Kids', to: '#' },
   { name: 'Accessories', to: '#' },
@@ -13,22 +13,16 @@ const Navigation = [
 
 export const Navbar = () => {
   const [searchbox, setSearchbox] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
   const [cart, setCart] = useState(false);
 
+  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartLength = cartItems.length;
 
-  // Function to fetch cart items from localStorage
-  const cartnum = JSON.parse(localStorage.getItem("cart"));
-  const cartLength = cartnum.length;
-
-  const Clear = () => {
+  const clearSearch = () => {
     setSearch("");
-  }
-
-  const Getname = (id) => {
-    console.log(id);
-  }
+  };
 
   const handleInput = () => {
     setSearchbox(true);
@@ -36,6 +30,11 @@ export const Navbar = () => {
 
   const closeSearchbox = () => {
     setSearchbox(false);
+  };
+
+  const handleSearch = () => {
+    // Perform search functionality here
+    console.log('Searching for:', search);
   };
 
   return (
@@ -47,14 +46,14 @@ export const Navbar = () => {
         {/* DESKTOP NAVIGATION */}
         <ul className='lg:flex gap-5 lg:w-[30%] hidden '>
           {Navigation.map((navitem, idx) => (
-            <li onClick={() => Getname(navitem.name)} key={idx} className='text-lg LinkStyles font-semibold'>
+            <li key={idx} className='text-lg LinkStyles font-semibold'>
               <Link to={`/product/${navitem.name}`}>{navitem.name}</Link>
             </li>
           ))}
         </ul>
         {/* DESKTOP SEARCH FUNCTIONALITY */}
         <div className='flex items-center justify-between gap-10'>
-          <form className='lg:flex transition-all duration-500 ease-in-out relative hidden'>
+          <form className='lg:flex relative hidden'>
             <input
               type='text'
               onInput={handleInput}
@@ -66,6 +65,7 @@ export const Navbar = () => {
             <button
               type='button'
               className='absolute top-0 left-0 px-3 h-12 transition-all duration-500 ease-in-out rounded-full hover:bg-gray-300'
+              onClick={handleSearch}
             >
               <Search size={25} />
             </button>
@@ -90,7 +90,7 @@ export const Navbar = () => {
                   className='absolute top-4 right-3 px-2 h-10 rounded-full hover:bg-gray-300'>
                   <X size={25} />
                 </button>
-              <Cart/> 
+                <Cart/> 
               </div>
             </div>
             <button
@@ -126,7 +126,7 @@ export const Navbar = () => {
         </div>
         {/* SEARCH BOX FUNCTIONALITY */}
         <div className={`fixed inset-0 transition-transform transform ${searchbox ? 'translate-y-0' : 'translate-y-full'} bg-opacity-30 bg-black backdrop-blur-sm z-50`}>
-          <div className='h-[400px] bg-gray-50 flex px-5 py-7 overflow-hidden w-full z-50 justify-between'>
+          <div className='h-[400px] bg-gray-50 flex px-5 py-7 overflow-hidden w-full justify-between'>
             <section className='flex h-0 items-center w-full py-2 justify-between'>
               <h1 className='text-2xl z-50 font-bold text-black'>LOGO</h1>
               <form className='relative'>
@@ -144,7 +144,7 @@ export const Navbar = () => {
                   <Search size={25} />
                 </button>
                 <button
-                  onClick={Clear}
+                  onClick={clearSearch}
                   type='button'
                   className='absolute top-0 right-0 px-3 h-12 rounded-full hover:bg-gray-300'>
                   <X size={25} />
