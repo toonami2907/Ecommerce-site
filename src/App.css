@@ -1,0 +1,55 @@
+/* .animated{
+    margin-left:60px;
+    animation:  slidein 7s infinite;
+}
+
+@keyframes slidein {
+    0%{opacity: 0;}
+    20%{opacity: 1;}
+    80%{opacity: 1;}
+    100%{opacity: 0;}
+} */
+
+.auto-write {
+    border-right: 2px solid;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: auto-write 10s infinite;
+}
+
+@keyframes auto-write{
+    0% {
+        width: 0;
+    }
+    50% {
+        width: 30%;
+    }
+    60% {
+        width: 30%;
+    }
+    100% {
+        width: 0;
+    }
+}
+.auto-write-sm{
+    font-size: 24px;
+    border-right: 2px solid;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: auto-write-sm 10s infinite;
+}
+
+@keyframes auto-write-sm{
+    0% {
+        width: 0;
+    }
+    50% {
+        width: 80%;
+    }
+    60% {
+        width: 80%;
+    }
+    100% {
+        width: 0;
+    }
+}

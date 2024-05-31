@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body{
+    font-family: "SpaceGrotesk";
+}
+
+@font-face {
+    font-family: "SpaceGrotesk";
+    src: url("assets/font/SpaceGrotesk-Regular-BF65712b4fdc934.ttf");
+}
+@font-face {
+    font-family: "SpaceGrotesk-bold";
+    src: url("assets/font/SpaceGrotesk-Bold-BF65712b4f9ac68.ttf");
+}
+
+@layer base {
+    .LinkStyles {
+        @apply font-["SpaceGrotesk"]
+    }
+}
