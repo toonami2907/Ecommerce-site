@@ -8,7 +8,7 @@ export default function Home() {
     <div>
       <Toaster/>
         <Banner/>
-        <ProductCard/>
+ {/* The product card was just for content on the page so i have remove it  */}
     </div>
   )
 }
