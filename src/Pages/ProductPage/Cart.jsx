@@ -76,10 +76,10 @@ const CheckOut =()=>{
 
                     <div className="flow-root ">
                         <ul role="list" className="-my-6 divide-y divide-gray-200">
-                            {cartItems.length === 0 ? (
+                            {cartItems?.length === 0 ? (
                                 <h1 className='text-3xl py-5'>NO ITEM. ADD ITEMS</h1>
                             ) : (
-                                cartItems.map((item, idx) => (
+                                cartItems && cartItems.map((item, idx) => (
                                     <li key={idx} className="py-6 flex space-x-6">
                                         <img
                                             src={item.image}

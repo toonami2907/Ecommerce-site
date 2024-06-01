@@ -1,13 +1,14 @@
 // StateProvider.jsx
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 const StateContext = createContext();
 
 export const StateProvider = ({ children }) => {
   const [hide, setHide] = useState(false);
+  const token = localStorage.getItem('token');
 
   return (
-    <StateContext.Provider value={{ hide, setHide }}>
+    <StateContext.Provider value={{ hide, setHide, token}}>
       {children}
     </StateContext.Provider>
   );
