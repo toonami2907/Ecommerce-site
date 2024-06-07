@@ -16,10 +16,14 @@ export default function AddProduct() {
     const [s2, setS2] = useState(0);
     const [stock, setStock]= useState(0)
     const [brand, setBrand]= useState("")
+    const  [hide , setHide]= useState(false)
+    const [disable, setDisable] = useState(false)
 
     let size = [s1, s2];
     let convertprice = Number(price)
     let convertStock = parseInt(stock)
+
+    
   
     const handleImage = async (e) => {
         const file = e.target.files[0];
@@ -29,11 +33,20 @@ export default function AddProduct() {
 
     const token = localStorage.getItem('token');
 
-    const categories = ["shoes", "Tops & T-shirts", "Short", "Jeans", "Hoodies", "Accessories", "Socks", "Pants & Tights"];
+  const handle_off = () =>{
+    setHide(!hide)
+    if (hide === true) {
+        setDisable(true)
+    }else{
+        setDisable(false)
+    }
+  }
+
+    const categories = ["shoes", "Tops & T-shirts", "Short", "Furnitures", "Hoodies", "Accessories", "Socks", "Pants & Tights"];
 
     const UploadProduct = async (e) => {
         e.preventDefault();
-        if (!name || !price || !category || !stock || !image || !brand || !size || !description){
+        if (!name || !price || !category || !stock || !image || !brand  || !description){
             return toast.error("All field are required")
         }
         try {
@@ -59,6 +72,7 @@ export default function AddProduct() {
             setImage === "";
             setPrice ===0;
             setStock === 0;
+            setDescription ===""
             setS1 === "";
             setS2 ===""
         } catch (error) {
@@ -87,8 +101,11 @@ export default function AddProduct() {
     return (
         <div>
             <section className='h-full w-full lg:px-10 px-5 '>
-                <div className='w-full flex md:flex-row flex-col justify-between lg:items-center'>
+                <div className='w-full flex md:flex-row flex-col gap-21 justify-between lg:items-center'>
                     <h1 className='lg:text-2xl text-lg font-semibold'>Add Product</h1>
+                    <button className='w-[200px] rounded-md shadow-md my-2 py-2 bg-blue-700'>
+                    <h1 onClick={()=>handle_off()} className='text-white'>{hide ? "Remove Size" : "Add Size"}</h1>
+                    </button>
                     <div>
                         <button
                             onClick={UploadProduct}
@@ -187,24 +204,28 @@ export default function AddProduct() {
                         </section>
                     </div>
                     {/* unknown card */}
-                    <div className='bg-gray-50 rounded-2xl px-5'>
+                    <div className={`${disable ? "hidden" : "bg-gray-50 rounded-2xl px-5"}`}>
                         <h1 className='text-xl'>Available Product Sizes</h1>
-                        <form action="" className='py-5 '>
+                        <form  action="" className={`${disable ? "hidden" : "flex"}`}>
                             <div className='flex gap-5'>
                                 <input
+                                    disabled={disable}
                                     type="number"
                                     required
                                     value={s1}
                                     onChange={(e) => {
                                         let check = e.target.value
+                                       
                                         if (check < 0||  check.length > 2 || check >45) {
                                             return
                                         }
+                                        
                                         setS1(check)}}
                                     placeholder='Size 1'
                                     className='w-20 h-10 rounded-md outline-none px-2 bg-gray-300 border-gray-300' />
                                 <input
                                     type="number"
+                                    disabled={disable}
                                     required
                                     value={s2}
                                     onChange={(e) => {

@@ -23,5 +23,13 @@ body{
 @layer base {
     .LinkStyles {
         @apply font-["SpaceGrotesk"]
-    }
+    };
+    .span-style {
+      @apply font-medium     }
+      .p-style{
+        @apply text-[17px] font-bold
+      }
+      .LiStyles{
+        @apply flex w-full justify-between items-center text-sm
+      }
 }

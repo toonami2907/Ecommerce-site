@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import Google from './Google'
 import axios from 'axios'
+import {useNavigate} from 'react-router-dom'
 
 export default function Sign_In() {
   const [email, setEmail]=useState("")
   const [password, setPassword]=useState("")
   const [invalid1, setInvalid1]=useState(false)
   const [invalid2, setInvalid2]=useState(false)
+  const navigate = useNavigate()
 
   const HandleSignIn =async (e)=>{
     e.preventDefault()
@@ -31,6 +33,8 @@ export default function Sign_In() {
         password,
       });
       toast.success("sign in sucesssfully");
+      navigate("/")
+      window.location.reload()
       localStorage.setItem("userID", response.data.user_id);
     localStorage.setItem("token", response.data.token);
     } catch (error) {
@@ -111,7 +115,7 @@ export default function Sign_In() {
             </button>
           </div>
         </form>
-        <Google/>
+        {/* <Google/> */}
       </div>
     </div>
   </div>

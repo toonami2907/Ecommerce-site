@@ -1,6 +1,7 @@
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import React, { useState } from 'react';
 import ToggleSwitch from './ToggleSwitch';
+import { useGlobalContext } from '../../components/config/StateProvider';
 
 
 
@@ -28,9 +29,15 @@ const SideNav = [
 export default function ProductSideBar() {
   const [expanded, setExpanded] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState({});
+  const {handle_filter} = useGlobalContext()
+
+  
 
   const handleClick = (name) => {
     setExpanded(expanded === name ? null : name);
+  };
+  const filterByCategory = (categoryId) => {
+    handle_filter(categoryId);
   };
 
   const handleCheckboxChange = (category, option) => {
@@ -43,11 +50,11 @@ export default function ProductSideBar() {
   return (
    <div className='lg:px-10 px-5 py-2 lg:flex flex-col hidden max-h-full w-full'>
      <div className='max-h-[95vh] w-full bg-white pr-2 md:pr-4 overflow-y-auto flex flex-col gap-10 '>
-      <button className='text-lg flex items-center self-start gap-3'>Pick Up today <ToggleSwitch/></button>
+      {/* <button className='text-lg flex items-center self-start gap-3'>Pick Up today <ToggleSwitch/></button> */}
       <ul className="flex flex-col gap-5">
         {Links.map((link)=>(
          <li key={link.name} className='text-lg'>
-           <button >{link.name}</button>
+           <button onClick={()=>filterByCategory(link.name)} >{link.name}</button>
          </li>
         ))}
       </ul>

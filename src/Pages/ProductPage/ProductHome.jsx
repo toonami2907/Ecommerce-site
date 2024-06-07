@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import ToBar from './ToBar';
 import ProductSideBar from './ProductSideBar';
-import ProductCard, { productCount } from './ProductCard';
+import ProductCard from './ProductCard';
 import { useGlobalContext } from '../../components/config/StateProvider';
 
 export default function ProductHome() {

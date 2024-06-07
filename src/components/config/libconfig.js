@@ -9,4 +9,4 @@ export function convertToBase64(file) {
             reject(error);
         };
     });
-}
+};

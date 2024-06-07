@@ -2,10 +2,10 @@
 import React from 'react';
 import { ChevronDown, SlidersHorizontal } from 'lucide-react';
 import { useGlobalContext } from '../../components/config/StateProvider';
-import { productCount } from './ProductCard';
+
 
 export default function ToBar({ id }) {
-  const { hide, setHide } = useGlobalContext();
+  const { hide, setHide, productCount } = useGlobalContext();
 
   const handleToggle = () => {
     setHide(!hide);

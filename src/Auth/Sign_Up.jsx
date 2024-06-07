@@ -72,6 +72,8 @@ export default function Sign_Up() {
           toast.error("User already exists");
         } else if(message.includes("password must be greater or must be 6")) {
           toast.error("Password must be greater or must be 6");
+        } else if(message.includes("User already exists with the following username")) {
+          toast.error("User with the Username already exist");
         } else {
           toast.error("Error: " + errorMessage);
         }
@@ -170,7 +172,7 @@ export default function Sign_Up() {
                 </button>
               </div>
             </form>
-            <Google/>
+            {/* <Google/> */}
           </div>
         </div>
       </div>

@@ -2,8 +2,10 @@ import React from 'react'
 import {GoogleAuthProvider, signInWithPopup, getAuth} from 'firebase/auth'
 import { app } from '../Firebase/firebase';
 import toast from 'react-hot-toast';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function Google() {
+  const navigate = useNavigate()
   const HandleGoogleAuth = async(e)=>{
     e.preventDefault();
   try {
@@ -30,13 +32,13 @@ export default function Google() {
 
     const data = await res.json();
     toast.success('Login successful');
+    navigate("/")
+    
 
     // Store token, username, and email in localStorage
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('username', data.username);
-    localStorage.setItem('email', data.email);
+    localStorage.setItem("userID", response.data.user_id);
 
-    console.log('Token:', data.token);
+    console.log('Token:', data.user_id);
     console.log('Username:', data.username);
     console.log('Email:', data.email);
   } catch (error) {
