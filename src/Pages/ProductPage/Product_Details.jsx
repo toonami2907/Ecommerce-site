@@ -37,7 +37,7 @@ export default function Product_Details() {
         fetch_products();
     }, []);
 
-    let ItemID = item?.find(item => item._id === id);
+    let ItemID = item.find(item => item._id === id);
     // let category = item?.filter((item) => item.category === "shoes");
     // let category2 = item?.filter((item) => item.category !== "shoes");
     // console.log(category);
@@ -76,7 +76,7 @@ export default function Product_Details() {
                   toast.error("Please Login in Again, Session expired Already....");
                   navigate("/login")
                 }  else {
-                  toast.error("Error: " + errorMessage);
+                  toast.error("Error: " + error);
                 }
               }
         }
