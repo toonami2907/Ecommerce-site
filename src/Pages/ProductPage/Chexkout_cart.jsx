@@ -12,8 +12,9 @@ export default function CheckOut_cart() {
     const userID = localStorage.getItem("userID");
    
     const fetch_user = async () => {
+        if(!userID)return;
         try {
-            const response = await axios.get(`http://localhost:8080/auth/user/${userID}`);
+            const response = await axios.get(`https://ecommerce-backend-kl4l.onrender.com/auth/user/${userID}`);
             setUserinfo(response.data.user_info);
              localStorage.setItem("user", response.data.user_info.cart.length);
             setCartItems(response.data.user_info.cart || []); // Ensure cart is set even if empty
@@ -34,7 +35,7 @@ export default function CheckOut_cart() {
 
     const removeFromCart = async ( productId, size) => {
         try {
-            const response = await fetch(`http://localhost:8080/product/v1/Remove`, {
+            const response = await fetch(`https://ecommerce-backend-kl4l.onrender.com/product/v1/Remove`, {
                 method : "DELETE",
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,7 +85,7 @@ export default function CheckOut_cart() {
     const increaseQuantity = async ( productId, size) => {
         console.log(productId);
         try {
-            const response = await axios.put(`http://localhost:8080/product/v1/Increase`, {
+            const response = await axios.put(`https://ecommerce-backend-kl4l.onrender.com/product/v1/Increase`, {
                 productId,
                 size,
                 userId:userID

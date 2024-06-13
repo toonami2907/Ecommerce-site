@@ -23,8 +23,9 @@ export default function Check_out() {
   const userID = localStorage.getItem("userID");
 
   const fetch_user = async () => {
+    if(!userID)return;
     try {
-      const response = await axios.get(`http://localhost:8080/auth/user/${userID}`);
+      const response = await axios.get(`https://ecommerce-backend-kl4l.onrender.com/auth/user/${userID}`);
       setUser(response.data.user_info.username)
       localStorage.setItem("user", response.data.user_info.cart.length);
       setCartItems(response.data.user_info.cart || []); // Ensure cart is set even if empty
@@ -46,10 +47,10 @@ export default function Check_out() {
 
   }, [cartinfo])
   const calculateTotal = () => {
-    return cartItems && cartItems.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
+    return cartItems && cartItems.reduce((total, item) => total + (item?.price * (item.quantity || 1)), 0);
   };
   const calculateTotal2 = () => {
-    return cartItems && cartItems.reduce((total, item) => total + (item.price * (item.quantity || 1)), 5);
+    return cartItems && cartItems.reduce((total, item) => total + (item?.price * (item.quantity || 1)), 5);
   };
 
   return (

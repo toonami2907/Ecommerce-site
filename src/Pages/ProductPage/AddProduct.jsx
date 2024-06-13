@@ -59,7 +59,7 @@ export default function AddProduct() {
             return toast.error("All fields are required");
         }
         try {
-            const response = await axios.post("http://localhost:8080/product/v1/create", {
+            const response = await axios.post("https://ecommerce-backend-kl4l.onrender.com/product/v1/create", {
                 name,
                 price: convertprice,
                 description,

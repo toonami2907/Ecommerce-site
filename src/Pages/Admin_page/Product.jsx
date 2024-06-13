@@ -11,7 +11,7 @@ Modal.setAppElement("#root");
 export default function Product() {
   const [product, setProduct] = useState([]);
   const [initial, setInitial] = useState([]);
-  const BASE_URL = "http://localhost:8080";
+  const BASE_URL = "https://ecommerce-backend-kl4l.onrender.com";
 
   const [modalOpen, setModalOpen] = useState({
     isShown: false,
@@ -21,7 +21,7 @@ export default function Product() {
 
   const fetch_products = async () => {
     // const response = await axios.get(
-    //   "http://localhost:8080/product/v1/products",
+    //   "https://ecommerce-backend-kl4l.onrender.com/product/v1/products",
     //   { withCredentials: true } // Ensure cookies are sent with the request
     // );
     try {
@@ -36,7 +36,7 @@ export default function Product() {
   const fetch_Product = async (id) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/product/v1/product/${id}`
+        `https://ecommerce-backend-kl4l.onrender.com/product/v1/product/${id}`
       );
       setInitial(response.data);
     } catch (error) {

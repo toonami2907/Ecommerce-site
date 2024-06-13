@@ -64,7 +64,7 @@ export default function Update_product({ id}) {
 
 
         try {
-            const response = await axios.put(`http://localhost:8080/product/v1/update/${id}`, {
+            const response = await axios.put(`https://ecommerce-backend-kl4l.onrender.com/product/v1/update/${id}`, {
                 name,
                 price: convertprice,
                 description,

@@ -21,7 +21,7 @@ export default function Product_Details() {
     const fetch_products = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:8080/product/v1/products",
+                "https://ecommerce-backend-kl4l.onrender.com/product/v1/products",
                 { withCredentials: true } // Ensure cookies are sent with the request
               );
             setItem(response.data);
@@ -52,7 +52,7 @@ export default function Product_Details() {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/product/v1/cart', {
+            const response = await axios.post('https://ecommerce-backend-kl4l.onrender.com/product/v1/cart', {
                 userId: userID,
                 productId: ItemID._id,
                 size,

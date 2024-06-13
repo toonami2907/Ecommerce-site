@@ -65,7 +65,7 @@ export default function Modal_Sign_Up({setModalOpen}) {
       setInvalid2(false)
     }
     try {
-      await axios.post("http://localhost:8080/auth/register", {
+      await axios.post("https://ecommerce-backend-kl4l.onrender.com/auth/register", {
         email, password, username
       })
       toast.success("Sign Up successfully");

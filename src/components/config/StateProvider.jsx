@@ -23,7 +23,7 @@ export const StateProvider = ({ children }) => {
   const fetch_products = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/product/v1/products",
+        "https://ecommerce-backend-kl4l.onrender.com/product/v1/products",
         { withCredentials: true } // Ensure cookies are sent with the request
       );
       setProduct(response.data);
@@ -112,7 +112,7 @@ export const StateProvider = ({ children }) => {
     if (!userID) return;
     try {
       const response = await axios.get(
-        `http://localhost:8080/auth/user/${userID}`,
+        `https://ecommerce-backend-kl4l.onrender.com/auth/user/${userID}`,
         { withCredentials: true }
       );
       setUserinfo(response.data.user_info);
