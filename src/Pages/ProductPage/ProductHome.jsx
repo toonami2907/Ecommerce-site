@@ -6,7 +6,7 @@ import ProductCard from './ProductCard';
 import { useGlobalContext } from '../../components/config/StateProvider';
 
 export default function ProductHome() {
-  const { hide } = useGlobalContext();
+  const { hide} = useGlobalContext();
   const { id } = useParams();
 
   return (

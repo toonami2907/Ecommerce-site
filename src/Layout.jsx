@@ -1,7 +1,6 @@
 import React from 'react'
 import {Outlet} from 'react-router-dom'
 import  {Navbar} from '../src/components/Navbar.jsx'
-import Footer from '../src/components/Footer.jsx'
 import { Toaster } from 'react-hot-toast'
 import { Navbar2 } from './Sections/Banner.jsx'
 

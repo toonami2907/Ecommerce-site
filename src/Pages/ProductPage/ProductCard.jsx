@@ -13,7 +13,7 @@ import { useGlobalContext } from '../../components/config/StateProvider';
 
  
   return (
-    <section className='py-2 px-5 max-h-screen overflow-y-auto'>
+    <section className='py-2 px-5 max-h-screen overflow-y-auto'>z
     <div className='relative grid grid-cols-2  lg:grid-cols-3 gap-2'>
       {filtered && filtered?.map((item, idx) => (
         <Link key={idx} to={`/about/${item._id}`}>
@@ -26,7 +26,7 @@ import { useGlobalContext } from '../../components/config/StateProvider';
             <div className='bg-gray-500 md:w-[150px] lg:w-[200px] px-1'>
               <p className='text-white text-sm lg:text-lg' > {item.category}</p>
             </div>
-            <p className='text-gray-700 font-light text-sm md:text-[17px] '>{item.description}</p>
+            {/* <p className='text-gray-700 font-light text-sm md:text-[17px] '>{item.description}</p> */}
             <h1 className='font-medium'>${item.price}</h1>
           </div>
         </Link>

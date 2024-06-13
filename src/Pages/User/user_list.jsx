@@ -8,7 +8,7 @@ export default function User_list() {
 
 const fetch_users = async() =>{
     try {
-        const response =await axios.get(`${BASE_URL}/auth/all_user`)
+        const response =await axios.get(`${BASE_URL}/auth/all_user`, { withCredentials: true } )
         setUser(response.data.response);
     } catch (error) {
         console.log(error);
@@ -16,7 +16,6 @@ const fetch_users = async() =>{
 }
 
 const delete_user = async (id)=>{
-    console.log(id);
     try {
         const response =  await axios.delete(`${BASE_URL}/auth/delete/${id}`)
         toast.success("deleted suceesssfully")
@@ -25,14 +24,15 @@ const delete_user = async (id)=>{
         console.log(error);
     }
 }
-console.log(user);
+
 
 useEffect(()=>{
     fetch_users()
 }, [])
 
   return (
-    <div className='max-h-[600px] max-w-full overflow-y-auto overflow-x-auto'>
+    <div className='max-h-full h-[700px] max-w-full overflow-x-auto'>
+      <h1 className='text-2xl font-semibold text-center py-2'>Users Available: {user.length} </h1>
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

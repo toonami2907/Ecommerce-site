@@ -11,10 +11,19 @@ export default function Cart({ setCart }) {
 
     const fetch_user = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/auth/user/${userID}`);
+            const response = await axios.get(`http://localhost:8080/auth/user/${userID}`,
+                { withCredentials: true }
+            );
             setCartItems(response.data.user_info.cart || []); // Ensure cart is set even if empty
         } catch (error) {
-            console.error(error);
+            if (error.response && error.response.data) {
+                const { message } = error.response.data;
+                if (message.includes("Invalid token")) {
+                  toast.error("Please Login in Again, Session expired Already....");
+                }  else {
+                  toast.error("Error: " + errorMessage);
+                }
+              }
         }
     };
 

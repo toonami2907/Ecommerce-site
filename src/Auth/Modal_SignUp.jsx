@@ -4,7 +4,7 @@ import axios from 'axios'
 import {Link, useNavigate}  from 'react-router-dom'
 import Google from './Google'
 
-export default function Sign_Up() {
+export default function Modal_Sign_Up({setModalOpen}) {
   const [email, setEmail]=useState("")
   const [password, setPassword]=useState("")
   const [username, setUsername]=useState("")
@@ -22,6 +22,13 @@ export default function Sign_Up() {
     return [...password].some(char => specialChars.includes(char));
   };
 
+   const close_Modal =()=>{
+    setModalOpen({
+        isShown: false,
+        type: "message",
+        data: null,
+      })
+   }
 
   const HandleSignUp =async(e)=>{
     e.preventDefault()
@@ -82,13 +89,13 @@ export default function Sign_Up() {
   }
   return (
     <div>
-           <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+           <div className="min-h-full bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign up to your account</h2>
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <div className=" py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={HandleSignUp}>
               <div>
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700">
@@ -143,7 +150,19 @@ export default function Sign_Up() {
                 </div>
               </div>
 
-             
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <input
+                    id="remember-me"
+                    name="remember-me"
+                    type="checkbox"
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  />
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                    Remember me
+                  </label>
+                </div>
+              </div>
 
               <div>
                 <button
@@ -154,7 +173,7 @@ export default function Sign_Up() {
                 </button>
               </div>
             </form>
-            <p>Already have an account  <Link to="/login">Log in here </Link> </p>
+            <Link  to="/login" className='text-black py-2'><p onClick={close_Modal} >Already have an account  Log in here  </p></Link>
           </div>
         </div>
       </div>

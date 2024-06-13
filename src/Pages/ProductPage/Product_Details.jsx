@@ -5,22 +5,34 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useGlobalContext } from '../../components/config/StateProvider';
 import Choose_Recommeded from '../../Sections/Choose_Recommeded';
+import Accordion from './Accordian';
+import {useCookies} from 'react-cookie'
+import {useNavigate} from 'react-router-dom'
+import Product_color from './Product_color';
 
 export default function Product_Details() {
     const { userID } = useGlobalContext();
+    const [cookie, setCookie, removeCookie] = useCookies(["access_token"])
     const { id } = useParams();
+    const navigate = useNavigate()
     const [item, setItem] = useState([]);
     const [size, setSize] = useState(null); // Initially set to null
 
     const fetch_products = async () => {
         try {
-            const product = await axios.get("http://localhost:8080/product/v1/products");
-            setItem(product.data);
+            const response = await axios.get(
+                "http://localhost:8080/product/v1/products",
+                { withCredentials: true } // Ensure cookies are sent with the request
+              );
+            setItem(response.data);
         } catch (error) {
             console.log(error);
         }
     };
 
+    useEffect(()=>{
+
+    },[cookie])
     useEffect(() => {
         fetch_products();
     }, []);
@@ -58,6 +70,15 @@ export default function Product_Details() {
                 console.error(error);
                 toast.error("Failed to add to cart");
             }
+            if (error.response && error.response.data) {
+                const { message } = error.response.data;
+                if (message.includes("Invalid token")) {
+                  toast.error("Please Login in Again, Session expired Already....");
+                  navigate("/login")
+                }  else {
+                  toast.error("Error: " + errorMessage);
+                }
+              }
         }
     };
 
@@ -82,7 +103,7 @@ export default function Product_Details() {
                         </div>
                     </div>
                     {/* PRODUCT INFO */}
-                    <div className='max-h-full overflow-y-auto py-10 px-5'>
+                    <div className='lg:max-h-[600px] overflow-y-auto py-10 px-5'>
                         <h1 className='text-4xl font-["SpaceGrotesk-bold"]'>
                             {ItemID ? ItemID.name : <div className='w-[400px] h-[40px] bg-gray-300 animate-pulse'></div>}
                         </h1>
@@ -116,17 +137,25 @@ export default function Product_Details() {
                                 <span className='w-full h-[80px] bg-gray-300 animate-pulse'></span>
                             )}
                         </p>
+                        {/* ACCORDIAN SECTION */}
+                        <div className='mb-4'>
+                        
+                        </div>
                         <div className='flex items-center gap-3'>
                             {ItemID ? (
                                 <>
                                 {ItemID.stock ===0 ? <X color='red' /> :<Check color='green' />}
                                     
-                                    <p className={`${ItemID.stock === 0 ?"text-red-600" :"text-gray-700"}`}>{ItemID.stock ===0? "Out of stock for now" : "In stock and ready for sale" } </p>
+                                    <p className={`${ItemID.stock === 0 ?"text-red-800" :"text-gray-700"}`}>{ItemID.stock ===0? "Out of stock for now" : "In stock and ready for sale" } </p>
                                 </>
                             ) : (
                                 <div className='w-[200px] h-[20px] bg-gray-300 animate-pulse'></div>
                             )}
                         </div>
+                        {/* Product color */}
+                       <div className='py-5'>
+                       <Product_color/>
+                       </div>
                         {/* PRODUCT SIZE */}
                         {ItemID && ItemID.category === 'shoes' && (
                             <>
@@ -137,23 +166,25 @@ export default function Product_Details() {
                                         key={sizeValue}
                                         value={sizeValue}
                                         onClick={() => handle_size(sizeValue)}
-                                        className={`${sizeValue === 0 ? "hidden" : "py-3 px-4"} rounded-md text-white ${size === sizeValue ? "bg-red-400" : "bg-black"}`}>
+                                        className={`${sizeValue === 0 ? "hidden" : "py-3 px-4"} rounded-md ${size === sizeValue ? "bg-gray-800 text-white" : "bg-gray-200 text-black "}`}>
                                         {sizeValue != 0 && sizeValue}
                                     </button>
                                 ))}
                             </div>
                             </>
                         )}
+                         
                         {/* ADD TO CART BUTTON */}
                         {ItemID ? (
                             <button
                                 onClick={() => handleCart(ItemID)}
-                                className='py-3 bg-black w-full rounded-md hover:bg-black/80 text-white text-lg'>
+                                className='py-3 bg-black w-full mb-4 rounded-md hover:bg-black/80 text-white text-lg'>
                                 Add to cart
                             </button>
                         ) : (
                             <div className='w-full h-[50px] bg-gray-300 animate-pulse rounded-md my-5'></div>
                         )}
+                        <Accordion/>
                     </div>
                 </section>
                 <Choose_Recommeded/>
