@@ -102,7 +102,7 @@ export default function Product() {
                   </tr>
                 </thead>
                 <tbody>
-                  {product.map((person, personIdx) => (
+                  {Array.isArray(product) && product.map((person, personIdx) => (
                     <tr key={person._id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {person.name}
