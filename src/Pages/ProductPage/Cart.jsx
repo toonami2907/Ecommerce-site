@@ -12,7 +12,7 @@ export default function Cart({ setCart }) {
 
     const fetch_user = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/auth/user/${userID}`,
+            const response = await axios.get(`https://ecommerce-backend-kl4l.onrender.com/auth/user/${userID}`,
                 { withCredentials: true }
             );
             setCartItems(response.data.user_info.cart || []); // Ensure cart is set even if empty
@@ -42,7 +42,7 @@ export default function Cart({ setCart }) {
 
     const removeFromCart = async (productId, size) => {
         try {
-            const response = await fetch(`http://localhost:8080/product/v1/Remove`, {
+            const response = await fetch(`https://ecommerce-backend-kl4l.onrender.com/product/v1/Remove`, {
                 method: "DELETE",
                 headers: {
                     'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export default function Cart({ setCart }) {
 
     const increaseQuantity = async (productId, size) => {
         try {
-            const response = await axios.put(`http://localhost:8080/product/v1/Increase`, {
+            const response = await axios.put(`https://ecommerce-backend-kl4l.onrender.com/product/v1/Increase`, {
                 productId,
                 size,
                 userId: userID
