@@ -14,7 +14,7 @@ export default function Google() {
     const result = await signInWithPopup(auth, provider);
     const token = await result.user.getIdToken(); // Get Firebase ID token
 
-    const res = await fetch("http://localhost:8080/auth/google", {
+    const res = await fetch("https://ecommerce-backend-kl4l.onrender.com/auth/google", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',

@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 export default function User_list() {
     const [user, setUser] = useState([]);
-    const BASE_URL = "http://localhost:8080"
+    const BASE_URL = "https://ecommerce-backend-kl4l.onrender.com"
 
 const fetch_users = async() =>{
     try {

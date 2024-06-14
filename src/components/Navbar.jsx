@@ -74,7 +74,7 @@ export const Navbar = () => {
     }
     try {
       const response = await axios.get(
-        `http://localhost:8080/product/v1/search/${search}`
+        `https://ecommerce-backend-kl4l.onrender.com/product/v1/search/${search}`
       );
       setData(response.data);
     } catch (error) {

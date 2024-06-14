@@ -10,24 +10,23 @@ export default function Cart({ setCart }) {
   const { setCartUpdate } = useGlobalContext();
   const userID = localStorage.getItem("userID");
 
-  const fetch_user = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/auth/user/${userID}`,
-        { withCredentials: true }
-      );
-      setCartItems(response.data.user_info.cart || []); // Ensure cart is set even if empty
-    } catch (error) {
-      if (error.response && error.response.data) {
-        const { message } = error.response.data ;
-        if (message.includes("Invalid token")) {
-          toast.error("Please Login in Again, Session expired Already....");
-        } else {
-          toast.error("Error: " + error);
+    const fetch_user = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/auth/user/${userID}`,
+                { withCredentials: true }
+            );
+            setCartItems(response.data.user_info.cart || []); // Ensure cart is set even if empty
+        } catch (error) {
+            if (error.response && error.response.data) {
+                const { message } = error.response.data;
+                if (message.includes("Invalid token")) {
+                  toast.error("Please Login in Again, Session expired Already....");
+                }  else {
+                  toast.error("Error: " + errorMessage);
+                }
+              }
         }
-      }
-    }
-  };
+    };
 
   useEffect(() => {
     fetch_user();
@@ -41,19 +40,19 @@ export default function Cart({ setCart }) {
     setCartItems(newCart);
   };
 
-  const removeFromCart = async (productId, size) => {
-    try {
-      const response = await fetch(`http://localhost:8080/product/v1/Remove`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: userID,
-          productId: productId,
-          size: size,
-        }),
-      });
+    const removeFromCart = async (productId, size) => {
+        try {
+            const response = await fetch(`http://localhost:8080/product/v1/Remove`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userID,
+                    productId: productId,
+                    size: size
+                })
+            });
 
       if (response.status === 200) {
         toast.success("Removed from cart successfully");
@@ -69,16 +68,13 @@ export default function Cart({ setCart }) {
     }
   };
 
-  const increaseQuantity = async (productId, size) => {
-    try {
-      const response = await axios.put(
-        `http://localhost:8080/product/v1/Increase`,
-        {
-          productId,
-          size,
-          userId: userID,
-        }
-      );
+    const increaseQuantity = async (productId, size) => {
+        try {
+            const response = await axios.put(`http://localhost:8080/product/v1/Increase`, {
+                productId,
+                size,
+                userId: userID
+            });
 
       if (response.status === 200) {
         toast.success("Increased quantity successfully");
