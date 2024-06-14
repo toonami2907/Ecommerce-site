@@ -1,8 +1,8 @@
-// StateProvider.jsx
 import axios from "axios";
-import {useNavigate} from 'react-router-dom'
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import React, { createContext, useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { useCookies } from "react-cookie";
+import toast from "react-hot-toast";
 
 const StateContext = createContext();
 
@@ -10,63 +10,56 @@ export const StateProvider = ({ children }) => {
   const [hide, setHide] = useState(false);
   const [userinfo, setUserinfo] = useState(null);
   const [cartinfo, setCartinfo] = useState(null);
-  const [product, setProduct] = useState(null);
-  const [filtered, setFiltered] = useState(null);
-  const [cartupdate, setCartupdate] = useState(0);
+  const [product, setProduct] = useState(null); // Initialize with null
+  const [filtered, setFiltered] = useState(null); // Initialize with null
+  const [cartUpdate, setCartUpdate] = useState(0);
   const [sortItems, setSortItems] = useState(false);
+  const [cookieValue, setCookieValue] = useState("");
+  const [cookies] = useCookies(["user_id"]);
   const userID = localStorage.getItem("userID");
-  const [cookies, setCookie, removeCookie] = useCookies(['user_id']);
-  const [cookieValue, setCookieValue] = useState("")
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  
-  const fetch_products = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:8080/product/v1/products",
-        { withCredentials: true } // Ensure cookies are sent with the request
-      );
-      setProduct(response.data);
-      setFiltered(response.data);
-    } catch (error) {
-      console.error("Failed to fetch products:", error);
-    }
-  };
+  // Fetch products on component mount
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/product/v1/products", { withCredentials: true });
+        setProduct(response.data);
+        setFiltered(response.data);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    };
 
- useEffect(()=>{
+    fetchProducts();
+  }, []); // Empty dependency array ensures it runs once on mount
+
+  useEffect(() => {
     const value = cookies.user_id;
-    setCookieValue(value)
-  },[cookies])
+    setCookieValue(value);
+  }, [cookies]);
 
-
-
-  const handle_sort = () => {
-    // Ensure product state is not null
+  const handleSort = useCallback(() => {
     if (product) {
-      // Create a copy of the product array to avoid mutating the original state
-      const sortedProduct = [...product];
-  
-      // Sort the product array based on the 'price' property
-      sortedProduct.sort((a, b) => a.price - b.price);
-  
-      // Update the state with the sorted product array
+      const sortedProduct = [...product].sort((a, b) => a.price - b.price);
       setFiltered(sortedProduct);
     }
-  };
-  
-  const handle_product_sorted = () => {
-    setSortItems(!sortItems);
-    if (sortItems === true) {
-      handle_sort();
-    } else {
-      setFiltered(product);
-    }
-  };
-  
-  const Handle_price = (priceRange) => {
+  }, [product]);
+
+  const handleProductSorted = useCallback(() => {
+    setSortItems((prevSortItems) => {
+      if (prevSortItems) {
+        handleSort();
+      } else {
+        setFiltered(product);
+      }
+      return !prevSortItems;
+    });
+  }, [handleSort, product]);
+
+  const handlePrice = useCallback((priceRange) => {
     let maxPrice;
-  
-    // Map price range string to max price value
+
     switch (priceRange) {
       case "$0 - $50":
         maxPrice = 50;
@@ -87,74 +80,57 @@ export const StateProvider = ({ children }) => {
         maxPrice = 0;
         break;
     }
-  
-    // Return early if no valid price range
-    if (maxPrice === 0) {
-      return;
-    }
-  
-    let PriceFilter;
-  
-    // Filter products based on the price range
-    if (maxPrice <= 200) {
-      PriceFilter = filtered.filter(item => item.price < maxPrice);
-    } else  {
-      PriceFilter = filtered.filter(item => item.price >= maxPrice);
-    }
-  
-    // Update the state with the filtered product array
-    setFiltered(PriceFilter);
-  };
-  
-  // console.log(filtered);
 
-  const fetch_user = async () => {
+    if (maxPrice === 0) return;
+
+    const priceFilter = maxPrice <= 200
+      ? filtered.filter((item) => item.price < maxPrice)
+      : filtered.filter((item) => item.price >= maxPrice);
+
+    setFiltered(priceFilter);
+  }, [filtered]);
+
+  const fetchUser = useCallback(async () => {
     if (!userID) return;
     try {
-      const response = await axios.get(
-        `http://localhost:8080/auth/user/${userID}`,
-        { withCredentials: true }
-      );
-      setUserinfo(response.data.user_info);
-      setCartinfo(response.data.user_info.cart || []);
+      const response = await axios.get(`http://localhost:8080/auth/user/${userID}`, { withCredentials: true });
+      setUserinfo(response.data?.user_info);
+      setCartinfo(response.data.user_info?.cart || []);
     } catch (error) {
-      if (response.status === 403) {
-        toast.error("Please Login in Again, Session expired Already....");
-        localStorage.setItem("userID", "")
-        navigate("/login")
-    }
+      toast.error("Please Login in Again, Session expired Already....");
+      localStorage.setItem("userID", "");
+      navigate("/login");
       console.error("Failed to fetch user:", error);
     }
-  };
+  }, [navigate, userID]);
 
   useEffect(() => {
-    fetch_user();
-    fetch_products();
-  }, []);
+    fetchUser();
+  }, [fetchUser]);
 
-  const handle_sex = (id)=>{
-      if(product) return;
-      if(!id) return;
-      const male = product.filter((item)=> item.sex === id)
-      setFiltered(male)
-  }
-  const handle_accessories = (id)=>{
-      if(!id) return;
-      if (id!== "Accessories" ) {
-        return setFiltered(product)
-      }
-      const accessories = product.filter((item)=> item.category === id)
-      setFiltered(accessories)
-  }
+  const handleSex = useCallback((id) => {
+    if (!product || !id) return;
+    const filteredItems = product.filter((item) => item.sex === id);
+    setFiltered(filteredItems);
+  }, [product]);
 
-  const handle_filter = (id) => {
-    if (!product) return;
-    if(!id) return;
+  const handleAccessories = useCallback((id) => {
+    if (!id) return;
+    if (id !== "Accessories") {
+      setFiltered(product);
+    } else {
+      const accessories = product.filter((item) => item.category === id);
+      setFiltered(accessories);
+    }
+  }, [product]);
+
+  const handleFilter = useCallback((id) => {
+    if (!product || !id) return;
     const filteredItems = product.filter((item) => item.category === id);
     setFiltered(filteredItems);
-  };
+  }, [product]);
 
-  const productCount = product?.length;
+  const productCount = useMemo(() => product?.length, [product]);
 
   return (
     <StateContext.Provider
@@ -164,18 +140,18 @@ export const StateProvider = ({ children }) => {
         productCount,
         cartinfo,
         filtered,
-        handle_filter,
-        handle_product_sorted,
-        handle_sort,
-        handle_accessories,
+        handleFilter,
+        handleProductSorted,
+        handleSort,
+        handleAccessories,
         sortItems,
         userinfo,
         userID,
         product,
-        cartupdate,
-        Handle_price,
-        handle_sex,
-        setCartupdate,
+        cartUpdate,
+        handlePrice,
+        handleSex,
+        setCartUpdate,
       }}
     >
       {children}

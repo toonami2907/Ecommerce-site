@@ -48,12 +48,11 @@ export default function Hero() {
           }
         ]
       };
-    
     return (
         <div className='h-[300px] flex flex-col gap-3 py-5 px-5 lg:px-10'>
             <h1 className='text-2xl lg:text-3xl font-bold'>Explore Popular categories</h1>   
             <Slider {...settings}>
-                {Categories.map((data, idx) => (
+                {Array.isArray(Categories) && Categories.map((data, idx) => (
                     <RoundedCard key={idx} imgURL={data.imgUrl} name={data.name} />
                 ))}
             </Slider>

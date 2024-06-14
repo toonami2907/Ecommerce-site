@@ -1,24 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import {
-  Heart,
-  Menu,
-  Search,
-  ShoppingBagIcon,
-  User,
-  UserRound,
-  X,
-} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Heart, Menu, Search, ShoppingBagIcon, UserRound, X } from "lucide-react";
 import Cart from "../Pages/ProductPage/Cart";
 import { useGlobalContext } from "./config/StateProvider";
 import axios from "axios";
 import Modal from "react-modal";
 import toast from "react-hot-toast";
 import Search_style from "./Search_style";
-import Sign_Up from "../Auth/Sign_Up";
 import Modal_component from "./Modal_component";
-import { useCookies} from "react-cookie";
-
+import { useCookies } from "react-cookie";
 
 Modal.setAppElement("#root");
 
@@ -36,7 +26,7 @@ export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [cart, setCart] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(['user_id']);
-  const [cookieValue, setCookieValue] = useState("")
+  const [cookieValue, setCookieValue] = useState("");
   const [modalOpen, setModalOpen] = useState({
     isShown: false,
     type: "message",
@@ -46,31 +36,33 @@ export const Navbar = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
 
-  
-
-  useEffect(()=>{
+  useEffect(() => {
     const value = cookies.user_id;
-    setCookieValue(value)
-  },[cookies])
-
+    setCookieValue(value);
+  }, [cookies]);
 
   const Authentication = async () => {
     setModalOpen({ isShown: true, type: "message", data: null });
   };
+
   const clearSearch = () => {
     setSearch("");
   };
+
   const signOut = () => {
+    removeCookie('user_id');
     localStorage.setItem("userID", "");
     navigate("/login");
     window.location.reload();
   };
+
   const handleInput = () => {
     setSearchbox(true);
   };
-  const handle_accessorie = (name)=>{
-    handle_accessories(name)
-  }
+
+  const handle_accessorie = (name) => {
+    handle_accessories(name);
+  };
 
   const closeSearchbox = () => {
     setSearchbox(false);
@@ -95,7 +87,7 @@ export const Navbar = () => {
         ) {
           toast.error("Failed to get product, please try again later");
         } else {
-          toast.error("Error: " + errorMessage);
+          toast.error("Error: " + message);
         }
       }
     }
@@ -107,19 +99,17 @@ export const Navbar = () => {
       handleSearch();
     }
   };
+
   return (
     <div className="h-full">
       <nav className="w-full py-4 LinkStyles flex relative items-center px-3 justify-between lg:px-10 bg-white">
-        <Link
-          to="/"
-          className="text-2xl LinkStyles font-bold text-gray-700 lg:w-[10%]"
-        >
+        <Link to="/" className="text-2xl LinkStyles font-bold text-gray-700 lg:w-[10%]">
           LOGO
         </Link>
         {/* DESKTOP NAVIGATION */}
-        <ul className="lg:flex gap-5 lg:w-[30%] hidden ">
+        <ul className="lg:flex gap-5 lg:w-[30%] hidden">
           {Navigation.map((navitem, idx) => (
-            <li onClick={()=>handle_accessorie(navitem.name)} key={idx} className="text-lg LinkStyles font-semibold">
+            <li onClick={() => handle_accessorie(navitem.name)} key={idx} className="text-lg LinkStyles font-semibold">
               <Link to={`/product/${navitem.name}`}>{navitem.name}</Link>
             </li>
           ))}
@@ -145,21 +135,26 @@ export const Navbar = () => {
             </button>
           </form>
           <div className="flex gap-5 font-light">
-            {/* User buttoon */}
-            {cookies ? "" : <>
-              <button
-              onClick={() => Authentication()}
-              className="hover:bg-gray-300 px-2 h-10 rounded-full"
-            >
-              <UserRound/>
-            </button>
-            
-            <Modal_component
-              setModalOpen={setModalOpen}
-              modalOpen={modalOpen}
-            />
-            </> }
-            
+            {/* User button */}
+            {!userinfo  ? (
+              <>
+                <button
+                  onClick={Authentication}
+                  className="hover:bg-gray-300 px-2 h-10 rounded-full"
+                >
+                  <UserRound />
+                </button>
+                <Modal_component
+                  key="modal"
+                  setModalOpen={setModalOpen}
+                  modalOpen={modalOpen}
+                />
+              </>
+            ) : (
+              <button onClick={signOut} className="hover:bg-gray-300 px-2 h-10 rounded-full">
+                Sign Out
+              </button>
+            )}
             <button
               onClick={() => setCart(!cart)}
               className="hover:bg-gray-300 relative px-2 h-10 rounded-full"
@@ -212,9 +207,6 @@ export const Navbar = () => {
             <ul className="flex flex-col py-16 h-[400px] justify-between">
               {Navigation.map((nav, idx) => (
                 <li key={idx}>
-                  {/* <Link to={nav.to} className='text-3xl LinkStyles'>
-                    {nav.name}
-                  </Link> */}
                   <Link
                     onClick={() => setOpen(!open)}
                     to={`/product/${nav.name}`}
@@ -234,7 +226,7 @@ export const Navbar = () => {
                   onClick={signOut}
                   className="md:px-7 md:py-2 px-4 py-2 bg-red-700 hover:bg-red-500 rounded-full text-white text-lg"
                 >
-                  sign out
+                  Sign Out
                 </button>
               </div>
             ) : (
@@ -249,7 +241,7 @@ export const Navbar = () => {
                   onClick={() => setOpen(!open)}
                   className="md:px-7 md:py-2 px-4 py-2 border border-gray-600 hover:border-black rounded-full text-lg text-gray-800"
                 >
-                  <Link to="/Login">Sign in</Link>
+                  <Link to="/login">Sign in</Link>
                 </button>
               </div>
             )}
@@ -257,14 +249,14 @@ export const Navbar = () => {
         </div>
         {/* SEARCH BOX FUNCTIONALITY */}
         <div
-          className={`fixed inset-0  transition-transform transform ${
+          className={`fixed inset-0 transition-transform transform ${
             searchbox ? "translate-y-0" : "translate-y-full"
           } bg-opacity-30 lg:flex hidden bg-black backdrop-blur-sm z-50`}
         >
           <div className="h-[400px] bg-gray-50 flex px-5 py-7 overflow-hidden w-full justify-between">
-            <section className="flex h-0  items-center w-full py-2 justify-between">
+            <section className="flex h-0 items-center w-full py-2 justify-between">
               <h1 className="text-2xl z-50 font-bold text-black">LOGO</h1>
-              <form className="relative ">
+              <form className="relative">
                 <input
                   type="text"
                   onInput={handleInput}
@@ -297,7 +289,7 @@ export const Navbar = () => {
             </section>
           </div>
           <div className="max-h-[300px] overflow-y-auto absolute top-20 w-full">
-            <div className=" px-5 py-7 w-[90%] mx-auto">
+            <div className="px-5 py-7 w-[90%] mx-auto">
               <Search_style data={data} />
             </div>
           </div>

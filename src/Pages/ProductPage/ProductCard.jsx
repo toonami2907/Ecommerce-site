@@ -15,7 +15,7 @@ import { useGlobalContext } from '../../components/config/StateProvider';
   return (
     <section className='py-2 px-5 max-h-screen overflow-y-auto'>z
     <div className='relative grid grid-cols-2  lg:grid-cols-3 gap-2'>
-      {filtered && filtered?.map((item, idx) => (
+      {Array.isArray(filtered) && filtered?.map((item, idx) => (
         <Link key={idx} to={`/about/${item._id}`}>
           <div key={idx} className="aspect-h-1 aspect-w-1  overflow-hidden rounded-md bg-gray-200  ">
             <img src={item.image} alt="" className=' object-cover object-center transition duration-1000 transform hover:scale-105' />
